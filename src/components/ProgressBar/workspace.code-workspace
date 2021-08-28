@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"path": "../../.."
+	},
+	{
+		"path": "../../../../kab-react-task-tracker"
+	}
+],
+  "settings": {
+    "git.ignoreLimitWarning": true
+  }
+}
