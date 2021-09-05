@@ -17,13 +17,11 @@ const QuizOver = React.forwardRef((props, ref) => {
     setAsked(ref.current)
   }, [ref])
 
-  const averageGrade = maxQuestions /2
+  const averageGrade = maxQuestions / 2;
   const decision = score >= averageGrade ? (
      <>
       <div className="stepsBtnContainer">
       
-    
-
       {
         quizLevel < levelNames.length ?
           (
