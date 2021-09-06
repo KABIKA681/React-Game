@@ -22,6 +22,7 @@ const Welcome = (props) => {
         .get()
         .then((doc) => {
           if (doc && doc.exists) {
+            
             const myData = doc.data();
             setUserData(myData);
           }

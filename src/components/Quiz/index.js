@@ -8,8 +8,6 @@ import QuizOver from "../QuizOver";
 
 toast.configure();
 
-
-
 class Quiz extends Component {
   constructor(props) {
     super(props)
@@ -48,13 +46,13 @@ class Quiz extends Component {
     }
   };
 
-  showToastMsg = name => {
+  showToastMsg = () => {
     if (!this.state.showWelcomeMsg) {
       this.setState({
         showWelcomeMsg: true,
       });
 
-      toast.warn(`Welcome ${name}, and good luck`, {
+      toast.warn("Welcome and good luck", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -79,7 +77,9 @@ class Quiz extends Component {
     }
     const goodAnswer = this.storedDataRef.current[this.state.idQuestion].answer;
     if (this.state.userAnswer === goodAnswer) {
-      
+      this.setState((prevState) => ({
+       score: prevState.score + 1,
+      }));
       toast.success("Congratulation +1 mark", {
         position: "top-right",
         autoClose: 3000,
@@ -120,8 +120,8 @@ class Quiz extends Component {
         btnDisabled: true,
       });
     }
-  
-    if (this.props.quizData) {
+
+    if (this.props.quizData !== prevProps.userData) {
       this.showToastMsg(this.props.quizData.name);
     }
     
@@ -170,6 +170,8 @@ class Quiz extends Component {
 
 
   render() {
+    console.log(this.props.quizData)
+
     const displayOptions = this.state.options.map((option, index) => {
       return (
         <p
