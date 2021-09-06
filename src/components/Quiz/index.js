@@ -8,22 +8,31 @@ import QuizOver from "../QuizOver";
 
 toast.configure();
 
-class Quiz extends Component {
-  state = {
-    levelNames: ["beginner", "middle", "expert"],
-    quizLevel: 0,
-    maxQuestions: 10,
-    storedQuestions: [],
-    question: null,
-    options: [],
-    idQuestion: 0,
-    btnDisabled: true,
-    userAnswer: null,
-    score: 0,
-    showWelcomeMsg: false,
-  };
 
-  storedDataRef = React.createRef();
+
+class Quiz extends Component {
+  constructor(props) {
+    super(props)
+
+    this.initialState = {
+      levelNames: ["beginner", "middle", "expert"],
+      quizLevel: 0,
+      maxQuestions: 10,
+      storedQuestions: [],
+      question: null,
+      options: [],
+      idQuestion: 0,
+      btnDisabled: true,
+      userAnswer: null,
+      score: 0,
+      showWelcomeMsg: false,
+    };
+  
+    this.state = this.initialState;
+    this.storedDataRef = React.createRef();
+  }
+  
+
 
   loadQuestions = (quizz) => {
     const fetchedQuiz = QuizGame[0].quizz[quizz];
@@ -39,13 +48,13 @@ class Quiz extends Component {
     }
   };
 
-  showWelcomeMsg = () => {
+  showToastMsg = name => {
     if (!this.state.showWelcomeMsg) {
       this.setState({
         showWelcomeMsg: true,
       });
 
-      toast.info("Welcome and Good luck!", {
+      toast.warn(`Welcome ${name}, and good luck`, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -95,7 +104,7 @@ class Quiz extends Component {
       });
     }
   };
-
+  
   componentDidUpdate(prevProps, prevState) {
     if (this.state.storedQuestions !== prevState.storedQuestions) {
       this.setState({
@@ -111,11 +120,13 @@ class Quiz extends Component {
         btnDisabled: true,
       });
     }
-
+  
     if (this.props.quizData) {
-      this.showWelcomeMsg(this.props.quizData.name);
+      this.showToastMsg(this.props.quizData.name);
     }
+    
   }
+  
 
   submitAnswer = (selectedAnswer) => {
     this.setState({
@@ -124,33 +135,39 @@ class Quiz extends Component {
     });
   };
 
-  getPercentage = (maxQuest, ourScore) => (ourScore / maxQuest) * 100;
+  getPercentage = (maxQuest, Ourscore) => (Ourscore / maxQuest) *100;
 
 
 
   gameOver = () => {
 
-    const gradepercent = this.getPercentage(this.state.maxQuestions, this.state.score);
+    const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
 
-    if (gradepercent >= 50) {
+    if (gradePercent >= 50) {
       this.setState({
         quizLevel: this.state.quizLevel + 1,
-        percent: gradepercent,
+        percent: gradePercent,
         quizEnd: true,
 
       })
 
     } else {
       this.setState({
-        percent: gradepercent,
+        percent: gradePercent,
         quizEnd: true,
 
       })
     }
-
-    this.setState({
-    });
   };
+
+  loadLevelQuestions = param => {
+    this.setState({ ...this.initialState, quizLevel: param })
+    
+    this.loadQuestions(this.state.levelNames[param]);
+
+  }
+
+
 
   render() {
     const displayOptions = this.state.options.map((option, index) => {
@@ -174,7 +191,8 @@ class Quiz extends Component {
         score={this.state.score}
         maxQuestions={this.state.maxQuestions}
         quizLevel={this.state.quizLevel}
-        percent = {this.state.percent}
+        percent={this.state.percent}
+        loadLevelQuestions={this.loadLevelQuestions}
       
       />
     ) : (
