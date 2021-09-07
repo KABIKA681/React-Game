@@ -13,11 +13,11 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   const [asked, setAsked] = useState([]);
 
+  console.log(loadLevelQuestions)
 
   useEffect(() => {
     setAsked(ref.current)
   }, [ref])
-
   const averageGrade = maxQuestions / 2;
   const decision = score >= averageGrade ? (
     <>
@@ -34,6 +34,7 @@ const QuizOver = React.forwardRef((props, ref) => {
                 >
                   Next Level</button>
               </>
+
             )
             :
             (
@@ -48,7 +49,9 @@ const QuizOver = React.forwardRef((props, ref) => {
                 </button>
               </>
             )
+
         }
+
       </div>
       <div className="percentage">
         <div className="progressPercent">Success Rate: {percent}%</div>
