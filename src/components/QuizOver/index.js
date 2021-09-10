@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ImGift } from 'react-icons/im'
 
 const QuizOver = React.forwardRef((props, ref) => {
   
@@ -19,6 +20,10 @@ const QuizOver = React.forwardRef((props, ref) => {
     setAsked(ref.current)
   }, [ref])
   const averageGrade = maxQuestions / 2;
+  if (score < averageGrade) {
+    // setTimeout(() => { loadLevelQuestions(0) }, 3000);
+    setTimeout(() => { loadLevelQuestions(quizLevel) }, 3500);
+  }
   const decision = score >= averageGrade ? (
     <>
       <div className="stepsBtnContainer">
@@ -39,7 +44,9 @@ const QuizOver = React.forwardRef((props, ref) => {
             :
             (
               <>
-                <p className="successMsg"> Congratulation, You have made it!</p>
+                <p className="successMsg">
+                  <ImGift  size='70px'/> Congratulation, You have made it!
+                </p>
                 <button
                   className="btnResult gameOver"
                   onClick = { () => loadLevelQuestions(0)}
@@ -93,9 +100,10 @@ const QuizOver = React.forwardRef((props, ref) => {
     :
     (
       <tr >
-      <td colSpan="3">
+          <td colSpan="3">
+            <div className="loader"></div>
             <p style={{ textAlign: 'center', color: 'red' }}>
-              No answers!
+             Repeat the failed level to pass!
             </p>
           </td>
       

@@ -5,6 +5,7 @@ import Levels from "../Levels";
 import ProgressBar from "../ProgressBar";
 import { QuizGame } from "../QuizGame";
 import QuizOver from "../QuizOver";
+import { FaChevronCircleRight } from 'react-icons/fa';
 
 toast.configure();
 
@@ -24,6 +25,7 @@ class Quiz extends Component {
       userAnswer: null,
       score: 0,
       showWelcomeMsg: false,
+      quizEnd:false
     };
   
     this.state = this.initialState;
@@ -42,15 +44,13 @@ class Quiz extends Component {
       this.setState({
         storedQuestions: newArray,
       });
-    } else {
-    }
+    } 
   };
 
   showToastMsg = () => {
     if (!this.state.showWelcomeMsg) {
-      this.setState({
-        showWelcomeMsg: true,
-      });
+      this.setState
+      ({showWelcomeMsg: true });
 
       toast.warn("Welcome and good luck", {
         position: "top-right",
@@ -69,7 +69,10 @@ class Quiz extends Component {
 
   nextQuestion = () => {
     if (this.state.idQuestion === this.state.maxQuestions - 1) {
-      this.gameOver();
+      //this.gameOver();
+      this.setState({
+        quizEnd: true,
+      })
     } else {
       this.setState((prevState) => ({
         idQuestion: prevState.idQuestion + 1,
@@ -106,13 +109,13 @@ class Quiz extends Component {
   };
   
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.storedQuestions !== prevState.storedQuestions) {
+    if ((this.state.storedQuestions !== prevState.storedQuestions) && this.state.storedQuestions.length ) {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
       });
     }
-    if (this.state.idQuestion !== prevState.idQuestion) {
+    if ((this.state.idQuestion !== prevState.idQuestion) && this.state.storedQuestions.length) {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
@@ -120,8 +123,12 @@ class Quiz extends Component {
         btnDisabled: true,
       });
     }
+    if (this.state.quizEnd !== prevState.quizEnd) {
+      const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
+      this.gameOver(gradePercent);
+    }
 
-    if (this.props.quizData !== prevProps.userData) {
+    if (this.props.quizData !== prevProps.quizData) {
       this.showToastMsg(this.props.quizData.name);
     }
     
@@ -139,24 +146,16 @@ class Quiz extends Component {
 
 
 
-  gameOver = () => {
+  gameOver = percent => {
 
-    const gradePercent = this.getPercentage(this.state.maxQuestions, this.state.score);
-
-    if (gradePercent >= 50) {
+if (percent >= 50) {
       this.setState({
         quizLevel: this.state.quizLevel + 1,
-        percent: gradePercent,
-        quizEnd: true,
-
+        percent
       })
 
     } else {
-      this.setState({
-        percent: gradePercent,
-        quizEnd: true,
-
-      })
+      this.setState({percent})
     }
   };
 
@@ -181,7 +180,7 @@ class Quiz extends Component {
             this.state.userAnswer === option ? " selected" : null
           }`}
         >
-          {option}
+         <FaChevronCircleRight color='#832c31'/> {option}
         </p>
       );
     });
@@ -199,7 +198,11 @@ class Quiz extends Component {
       />
     ) : (
       <>
-        <Levels />
+          <Levels
+            levelNames={this.state.levelNames}
+            quizLevel={this.state.quizLevel}
+          
+          />
         <ProgressBar
           idQuestion={this.state.idQuestion}
           maxQuestions={this.state.maxQuestions}
