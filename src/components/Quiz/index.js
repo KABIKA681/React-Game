@@ -128,7 +128,7 @@ class Quiz extends Component {
       this.gameOver(gradePercent);
     }
 
-    if (this.props.quizData !== prevProps.quizData) {
+    if (this.props.quizData.name !== prevProps.quizData) {
       this.showToastMsg(this.props.quizData.name);
     }
     

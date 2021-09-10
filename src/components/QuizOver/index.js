@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ImGift } from 'react-icons/im'
+import Modal from "../Modal";
 
 const QuizOver = React.forwardRef((props, ref) => {
   
@@ -13,12 +14,24 @@ const QuizOver = React.forwardRef((props, ref) => {
   } = props;
 
   const [asked, setAsked] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
 
   console.log(loadLevelQuestions)
 
   useEffect(() => {
     setAsked(ref.current)
   }, [ref])
+
+  const showModal = id => {
+    setOpenModal(true)
+  }
+  const hideModal = () => {
+    setOpenModal(false);
+
+  }
+
+
   const averageGrade = maxQuestions / 2;
   if (score < averageGrade) {
     // setTimeout(() => { loadLevelQuestions(0) }, 3000);
@@ -90,7 +103,11 @@ const QuizOver = React.forwardRef((props, ref) => {
           <td>{question.question}</td>
           <td>{question.answer}</td>
           <td>
-            <button className="btnInfo">Infos</button>
+            <button
+              onClick={ () => showModal(question.heroId)}
+              className="btnInfo">
+              Infos
+            </button>
           </td>
           
         </tr>
@@ -131,7 +148,22 @@ const QuizOver = React.forwardRef((props, ref) => {
         </tbody>
         </table>
       </div>
+     <Modal showModal={openModal} hideModal={hideModal}>
+      <div className="modalHeader">
+          <h2>Titre</h2>
+        </div>
+        <div className="modalBody">
+          <h3>Titre 2</h3>
+        </div>
+        <div className="modalFooter">
+          <button className="modalBtn">Close</button>
+        </div>
+      </Modal>
+    
+
     </>
+
+   
   );
 });
 
