@@ -4,7 +4,7 @@ import { FirebaseContext } from "../Firebase";
 import { Link } from "react-router-dom";
 
 const imgEchcec = {
-  width: "690px",
+  width: "700px",
   height: "700px",
   marginLeft: "0 0",
   marginBottom: "0",
